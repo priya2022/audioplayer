@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <title>
+            Audio Player
+        </title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+       
+        <script src="https://kit.fontawesome.com/011a95631a.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            
+            <h2>
+                Music Player
+            </h2>
+            <img id="track_image" alt="">
+
+            <p id="title">title.mp3</p>
+            <marquee id ="artist">Artist Name</marquee>
+            <input type="range" id="duration_slider" min="0" max="100" value="0" onclick="change_duration()">
+            <button onclick="previous_song()" id="pre"><i class="fas fa-step-backward"></i>
+
+            </button>
+            <button onclick="justplay()" id="play"><i class="fas fa-play"></i></button>
+            <button onclick="next_song()" id="next"><i class="fas fa-step-forward"></i></button>
+
+       
+        </div>
+        <script>
+            let previous =document.querySelector('#pre');
+            let play = document.querySelector('#play');
+            let next =document.querySelector('#next');
+            let title =document.querySelector('#title');
+            let artist = document.querySelector('#artist')
+            let slider =document.querySelector('#duration_slider');
+            let track_image = document.querySelector('#track_image');
+            let timer;
+            let autoplay=1;
+
+            let track =document.createElement('audio');
+            let index_no = 0;
+            let plaing_song= false;
+
+            let all_song = 
+            [
+                {
+                    name:"Kaatu Sirriki",
+                    path:"audio/song1.mp3",
+                    img:"images/img1.jpg",
+                    artist:'"Kattu sirikki by Shankar Mahadevan"'
+
+                },
+                {
+                    name:"Maruvarthai",
+                    path:"audio/song2.mp3",
+                    img:"images/img2.jpg",
+                    artist:'"Maruvarthai by Sid SriRam"'
+                },
+                {
+                    name:"Unnale",
+                    path:"audio/song3.mp3",
+                    img:"images/img3.jpg",
+                    artist:'"Unnale By Vandana Srinivasan"'
+                }
+
+            ];
+
+            function load_track(index_no)
+            {
+                clearInterval(timer);
+                reset_slider();
+
+                track.src =all_song[index_no].path;
+                title.innerHTML =all_song[index_no].name;
+                track_image.src =all_song[index_no].img;
+                artist.innerHTML =all_song[index_no].artist;
+
+                timer =setInterval(range_slider,1000);
+                total.innerHTML =all_song.length;
+                present.innerHTML = index_no + 1;
+
+
+            }
+            load_track(index_no);
+
+            function justplay()
+            {
+                if(plaing_song == false)
+                {
+                    playsong();
+                }
+                else
+                {
+                    pausesong();
+                }
+            }
+            function reset_slider()
+            {
+                slider.value = 0;
+            }
+            function playsong()
+            {
+                track.play();
+                plaing_song =true;
+                play.innerHTML ='<i class="fas fa-pause"></i>'
+            }
+            function pausesong()
+            {
+                track.pause();
+                plaing_song = false;
+                play.innerHTML ='<i class="fas fa-play"></i>'
+
+            }
+            function next_song()
+            {
+                if(index_no < all_song.length-1)
+                {
+                    index_no += 1;
+                    load_track(index_no);
+                    playsong();
+                }
+                else
+                {
+                    index_no = 0;
+                    load_track(index_no);
+                    playsong();
+                }
+            }
+
+            function previous_song()
+            {
+                if(index_no > 0)
+                {
+                    index_no -= 1;
+                    load_track(index_no);
+                    playsong();
+                }
+                else{
+                    index_no = all_song.length;
+                    load_track(index_no);
+                    playsong();
+                }
+               
+            }
+            function change_duration()
+            {
+                slider_position = track.duration * (slider.value/100);
+                track.currentTime = slider_position;
+            }
+           
+        </script>
+
+    </body>
+</html>
